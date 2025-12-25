@@ -1,0 +1,17 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-104.9903, 39.7392] },
+      "properties": {
+        "address": "123 DEMO ST",
+        "permit_num": "2025-DEMO-001",
+        "description": "Demo of existing structure",
+        "status": "ISSUED",
+        "issued_date": "2025-12-01",
+        "type": "Demolition"
+      }
+    }
+  ]
+}

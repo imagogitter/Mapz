@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Denver Demo Map</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+  <div id="app">
+    <div id="map"></div>
+    <div id="info-panel">
+      <div id="info-header">
+        <div id="info-address">Tap a marker</div>
+        <button id="info-close" aria-label="Close details">&times;</button>
+      </div>
+      <div id="info-body">
+        <div id="info-meta">
+          <div><span class="label">Permit:</span> <span id="info-permit"></span></div>
+          <div><span class="label">Type:</span> <span id="info-type"></span></div>
+          <div><span class="label">Status:</span> <span id="info-status"></span></div>
+          <div><span class="label">Issued:</span> <span id="info-issued"></span></div>
+        </div>
+        <div id="info-description"></div>
+        <div id="streetview-section">
+          <div class="label">Street View:</div>
+          <div id="streetview-container">
+            <div id="streetview-placeholder">Street View not available.</div>
+            <img id="streetview-thumb" alt="Street View preview" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script src="./app.js"></script>
+</body>
+</html>
