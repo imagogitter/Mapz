@@ -1,5 +1,5 @@
 const DATA_URL = "./data/demolition_permits_last_month.geojson";
-const STREET_VIEW_API_KEY = "YOUR_STREET_VIEW_API_KEY";
+// Using Mapillary - no API key required for basic usage
 const STREET_VIEW_SIZE = "320x160";
 
 let map;
@@ -58,20 +58,37 @@ function closeInfoPanel() { infoPanel.classList.remove("open"); currentMarker = 
 infoClose.addEventListener("click", closeInfoPanel);
 
 function setupStreetView(lat, lng) {
-  if (lat == null || lng == null) { svImg.style.display = "none"; svPlaceholder.textContent = "Location not available."; svPlaceholder.style.display = "flex"; svImg.onclick = null; return; }
-  if (!STREET_VIEW_API_KEY) { svImg.style.display = "none"; svPlaceholder.textContent = "Tap to open Street View (online)."; svPlaceholder.onclick = () => { const url = buildStreetViewMapsUrl(lat, lng); window.open(url, "_blank"); }; svPlaceholder.style.display = "flex"; return; }
-  const svUrl = buildStreetViewStaticUrl(lat, lng);
-  svPlaceholder.style.display = "none"; svImg.src = svUrl; svImg.style.display = "block"; svImg.onclick = () => { const url = buildStreetViewMapsUrl(lat, lng); window.open(url, "_blank"); };
+  if (lat == null || lng == null) {
+    svImg.style.display = "none";
+    svPlaceholder.textContent = "Location not available.";
+    svPlaceholder.style.display = "flex";
+    svImg.onclick = null;
+    return;
+  }
+
+  // Mapillary doesn't require API key for web viewing
+  svImg.style.display = "none";
+  svPlaceholder.textContent = "Tap to open Mapillary Street View";
+  svPlaceholder.onclick = () => {
+    const url = buildMapillaryUrl(lat, lng);
+    window.open(url, "_blank");
+  };
+  svPlaceholder.style.display = "flex";
+}
+
+function buildMapillaryUrl(lat, lng) {
+  // Mapillary web viewer - opens street view at the location
+  return `https://www.mapillary.com/app/?lat=${lat}&lng=${lng}&z=17&focus=photo`;
 }
 
 function buildStreetViewStaticUrl(lat, lng) {
-  const base = "https://maps.googleapis.com/maps/api/streetview";
-  const params = new URLSearchParams({ size: STREET_VIEW_SIZE, location: `${lat},${lng}`, key: STREET_VIEW_API_KEY });
-  return `${base}?${params.toString()}`;
+  // Fallback - not used with Mapillary
+  return "";
 }
 
 function buildStreetViewMapsUrl(lat, lng) {
-  return `https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${lat},${lng}`;
+  // Fallback - not used with Mapillary
+  return buildMapillaryUrl(lat, lng);
 }
 
 document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeInfoPanel(); });
