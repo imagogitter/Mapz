@@ -3,14 +3,182 @@
   "features": [
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [-104.9903, 39.7392] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -104.9903,
+          39.7392
+        ]
+      },
       "properties": {
-        "address": "123 DEMO ST",
-        "permit_num": "2025-DEMO-001",
-        "description": "Demo of existing structure",
+        "address": "100 Downtown Denver St, Denver, CO",
+        "permit_num": "2025-DEM-1001",
+        "type": "Demolition",
         "status": "ISSUED",
-        "issued_date": "2025-12-01",
-        "type": "Demolition"
+        "issued_date": "2025-12-25",
+        "description": "Demolition of residential structure in Downtown Denver"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -104.9956,
+          39.7567
+        ]
+      },
+      "properties": {
+        "address": "150 LoDo St, Denver, CO",
+        "permit_num": "2025-DEM-1002",
+        "type": "Demolition",
+        "status": "UNDER_REVIEW",
+        "issued_date": "2025-12-23",
+        "description": "Demolition of residential structure in LoDo"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -104.9844,
+          39.7676
+        ]
+      },
+      "properties": {
+        "address": "200 RiNo St, Denver, CO",
+        "permit_num": "2025-DEM-1003",
+        "type": "Demolition",
+        "status": "APPROVED",
+        "issued_date": "2025-12-21",
+        "description": "Demolition of residential structure in RiNo"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -104.9674,
+          39.7627
+        ]
+      },
+      "properties": {
+        "address": "250 Five Points St, Denver, CO",
+        "permit_num": "2025-DEM-1004",
+        "type": "Demolition",
+        "status": "ISSUED",
+        "issued_date": "2025-12-19",
+        "description": "Demolition of residential structure in Five Points"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -104.9744,
+          39.7259
+        ]
+      },
+      "properties": {
+        "address": "300 Baker St, Denver, CO",
+        "permit_num": "2025-DEM-1005",
+        "type": "Demolition",
+        "status": "UNDER_REVIEW",
+        "issued_date": "2025-12-17",
+        "description": "Demolition of residential structure in Baker"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -104.9844,
+          39.7199
+        ]
+      },
+      "properties": {
+        "address": "350 Washington Park St, Denver, CO",
+        "permit_num": "2025-DEM-1006",
+        "type": "Demolition",
+        "status": "APPROVED",
+        "issued_date": "2025-12-15",
+        "description": "Demolition of residential structure in Washington Park"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -104.9774,
+          39.6989
+        ]
+      },
+      "properties": {
+        "address": "400 South Pearl Street St, Denver, CO",
+        "permit_num": "2025-DEM-1007",
+        "type": "Demolition",
+        "status": "ISSUED",
+        "issued_date": "2025-12-13",
+        "description": "Demolition of residential structure in South Pearl Street"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -104.8191,
+          39.7589
+        ]
+      },
+      "properties": {
+        "address": "450 Aurora St, Denver, CO",
+        "permit_num": "2025-DEM-1008",
+        "type": "Demolition",
+        "status": "UNDER_REVIEW",
+        "issued_date": "2025-12-11",
+        "description": "Demolition of residential structure in Aurora"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -105.0311,
+          39.7544
+        ]
+      },
+      "properties": {
+        "address": "500 Highlands St, Denver, CO",
+        "permit_num": "2025-DEM-1009",
+        "type": "Demolition",
+        "status": "APPROVED",
+        "issued_date": "2025-12-09",
+        "description": "Demolition of residential structure in Highlands"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -104.9211,
+          39.742
+        ]
+      },
+      "properties": {
+        "address": "550 Cheesman Park St, Denver, CO",
+        "permit_num": "2025-DEM-1010",
+        "type": "Demolition",
+        "status": "ISSUED",
+        "issued_date": "2025-12-07",
+        "description": "Demolition of residential structure in Cheesman Park"
       }
     }
   ]
