@@ -6,17 +6,18 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -104.9903,
-          39.7392
+          -104.92068517963,
+          39.741937592663
         ]
       },
       "properties": {
-        "address": "100 Downtown Denver St, Denver, CO",
+        "address": "123 Test St, Denver, CO",
         "permit_num": "2025-DEM-1001",
         "type": "Demolition",
         "status": "ISSUED",
         "issued_date": "2025-12-25",
-        "description": "Demolition of residential structure in Downtown Denver"
+        "description": "Demolition of residential structure in Denver",
+        "mapillary_pKey": "1452352045107046"
       }
     },
     {

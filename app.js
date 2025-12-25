@@ -30,12 +30,12 @@ async function loadPermits() {
     const res = await fetch(DATA_URL);
     const geojson = await res.json();
     permitsLayer = L.geoJSON(geojson, {
-      pointToLayer: async (feature, latlng) => {
+      pointToLayer: (feature, latlng) => {
         const coords = feature.geometry && feature.geometry.coordinates;
         const lng = coords && coords[0]; const lat = coords && coords[1];
 
         // Create custom marker with street view thumbnail
-        const marker = await createStreetViewMarker(lat, lng, feature);
+        const marker = createStreetViewMarker(lat, lng, feature);
         return marker;
       },
       onEachFeature: (feature, layer) => {
@@ -58,8 +58,8 @@ async function loadPermits() {
   } catch (err) { console.error("Failed to load permits data", err); }
 }
 
-async function createStreetViewMarker(lat, lng, feature) {
-  const thumbnailUrl = await getStreetViewThumbnail(lat, lng);
+function createStreetViewMarker(lat, lng, feature) {
+  const thumbnailUrl = getStreetViewThumbnail(lat, lng);
 
   const iconHtml = `
     <div class="streetview-marker">
@@ -83,38 +83,36 @@ async function createStreetViewMarker(lat, lng, feature) {
 
 async function getStreetViewThumbnail(lat, lng) {
   // Create a styled marker with street view icon using canvas
-  return new Promise((resolve) => {
-    const canvas = document.createElement('canvas');
-    canvas.width = 60;
-    canvas.height = 45;
-    const ctx = canvas.getContext('2d');
+  const canvas = document.createElement('canvas');
+  canvas.width = 60;
+  canvas.height = 45;
+  const ctx = canvas.getContext('2d');
 
-    // Create gradient background
-    const gradient = ctx.createLinearGradient(0, 0, 60, 45);
-    gradient.addColorStop(0, '#e53935');
-    gradient.addColorStop(1, '#b71c1c');
+  // Create gradient background
+  const gradient = ctx.createLinearGradient(0, 0, 60, 45);
+  gradient.addColorStop(0, '#e53935');
+  gradient.addColorStop(1, '#b71c1c');
 
-    ctx.fillStyle = gradient;
-    ctx.fillRect(0, 0, 60, 45);
+  ctx.fillStyle = gradient;
+  ctx.fillRect(0, 0, 60, 45);
 
-    // Add street view icon
-    ctx.fillStyle = 'white';
-    ctx.font = '20px Arial';
-    ctx.textAlign = 'center';
-    ctx.fillText('🏙️', 30, 28);
+  // Add street view icon
+  ctx.fillStyle = 'white';
+  ctx.font = '20px Arial';
+  ctx.textAlign = 'center';
+  ctx.fillText('🏙️', 30, 28);
 
-    // Add camera icon in corner
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
-    ctx.beginPath();
-    ctx.arc(50, 15, 6, 0, 2 * Math.PI);
-    ctx.fill();
+  // Add camera icon in corner
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+  ctx.beginPath();
+  ctx.arc(50, 15, 6, 0, 2 * Math.PI);
+  ctx.fill();
 
-    ctx.fillStyle = '#e53935';
-    ctx.font = '8px Arial';
-    ctx.fillText('📷', 50, 19);
+  ctx.fillStyle = '#e53935';
+  ctx.font = '8px Arial';
+  ctx.fillText('📷', 50, 19);
 
-    resolve(canvas.toDataURL());
-  });
+  return canvas.toDataURL();
 }
 
 function createPopupContent(feature, lat, lng) {
@@ -123,6 +121,7 @@ function createPopupContent(feature, lat, lng) {
   const permitNum = props.permit_num || "";
   const status = props.status || "";
   const type = props.type || "";
+  const pKey = props.mapillary_pKey || "";
 
   return `
     <div class="popup-content">
@@ -135,7 +134,7 @@ function createPopupContent(feature, lat, lng) {
         <div><span class="label">Status:</span> ${status}</div>
       </div>
       <div class="popup-streetview">
-        <button class="streetview-btn" onclick="openStreetView(${lat}, ${lng})">
+        <button class="streetview-btn" onclick="openStreetView(${lat}, ${lng}, '${pKey}')">
           🏙️ View Street View
         </button>
       </div>
@@ -143,9 +142,9 @@ function createPopupContent(feature, lat, lng) {
   `;
 }
 
-function openStreetView(lat, lng) {
+function openStreetView(lat, lng, pKey) {
   if (lat != null && lng != null) {
-    const url = `https://www.mapillary.com/app/?lat=${lat}&lng=${lng}&z=17&focus=photo`;
+    const url = buildMapillaryUrl(lat, lng, pKey || null);
     window.open(url, "_blank");
   }
 }
@@ -155,13 +154,14 @@ function onFeatureClick(feature, layer) {
   const props = feature.properties || {};
   const coords = feature.geometry && feature.geometry.coordinates;
   const lng = coords && coords[0]; const lat = coords && coords[1];
+  const pKey = props.mapillary_pKey;
   infoAddress.textContent = props.address || "(no address)";
   infoPermit.textContent = props.permit_num || "";
   infoType.textContent = props.type || "";
   infoStatus.textContent = props.status || "";
   infoIssued.textContent = props.issued_date || "";
   infoDescription.textContent = props.description || "";
-  setupStreetView(lat, lng);
+  setupStreetView(lat, lng, pKey);
   openInfoPanel();
   if (lat != null && lng != null) map.panTo([lat, lng], { animate: true, duration: 0.3 });
 }
@@ -170,7 +170,7 @@ function openInfoPanel() { infoPanel.classList.add("open"); }
 function closeInfoPanel() { infoPanel.classList.remove("open"); currentMarker = null; }
 infoClose.addEventListener("click", closeInfoPanel);
 
-function setupStreetView(lat, lng) {
+function setupStreetView(lat, lng, pKey = null) {
   if (lat == null || lng == null) {
     svImg.style.display = "none";
     svPlaceholder.textContent = "Location not available.";
@@ -183,15 +183,18 @@ function setupStreetView(lat, lng) {
   svImg.style.display = "none";
   svPlaceholder.textContent = "Tap to open Mapillary Street View";
   svPlaceholder.onclick = () => {
-    const url = buildMapillaryUrl(lat, lng);
+    const url = buildMapillaryUrl(lat, lng, pKey);
     window.open(url, "_blank");
   };
   svPlaceholder.style.display = "flex";
 }
 
-function buildMapillaryUrl(lat, lng) {
-  // Mapillary web viewer - opens street view at the location
-  return `https://www.mapillary.com/app/?lat=${lat}&lng=${lng}&z=17&focus=photo`;
+function buildMapillaryUrl(lat, lng, pKey = null) {
+  let url = `https://www.mapillary.com/app/?lat=${lat}&lng=${lng}&z=17&focus=photo`;
+  if (pKey) {
+    url += `&pKey=${pKey}`;
+  }
+  return url;
 }
 
 function buildStreetViewStaticUrl(lat, lng) {
