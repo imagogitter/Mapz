@@ -16,3 +16,56 @@ html, body { margin: 0; padding: 0; height: 100%; font-family: system-ui, -apple
 #streetview-placeholder { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; color: #666; font-size: 0.75rem; padding: 0 8px; text-align: center; }
 #streetview-thumb { width: 100%; height: 100%; object-fit: cover; display: none; cursor: pointer; }
 @media (min-width: 768px) { #info-panel { max-width: 420px; left: 8px; right: auto; bottom: 8px; border-radius: 8px; max-height: 50%; } }
+
+/* Popup styles */
+.permit-popup .leaflet-popup-content-wrapper {
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.popup-content {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 0.85rem;
+  line-height: 1.4;
+  max-width: 280px;
+}
+
+.popup-header {
+  margin-bottom: 8px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid #eee;
+  font-size: 0.9rem;
+}
+
+.popup-details {
+  margin-bottom: 8px;
+}
+
+.popup-details .label {
+  font-weight: 600;
+  color: #666;
+  margin-right: 4px;
+}
+
+.popup-streetview {
+  margin-top: 8px;
+}
+
+.streetview-btn {
+  background: #e53935;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  transition: background-color 0.2s;
+}
+
+.streetview-btn:hover {
+  background: #d32f2f;
+}
