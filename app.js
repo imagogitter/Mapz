@@ -30,7 +30,14 @@ async function loadPermits() {
     const res = await fetch(DATA_URL);
     const geojson = await res.json();
     permitsLayer = L.geoJSON(geojson, {
-      pointToLayer: (feature, latlng) => L.circleMarker(latlng, { radius: 6, fillColor: "#e53935", color: "#b71c1c", weight: 1, opacity: 1, fillOpacity: 0.9 }),
+      pointToLayer: async (feature, latlng) => {
+        const coords = feature.geometry && feature.geometry.coordinates;
+        const lng = coords && coords[0]; const lat = coords && coords[1];
+
+        // Create custom marker with street view thumbnail
+        const marker = await createStreetViewMarker(lat, lng, feature);
+        return marker;
+      },
       onEachFeature: (feature, layer) => {
         const props = feature.properties || {};
         const coords = feature.geometry && feature.geometry.coordinates;
@@ -49,6 +56,65 @@ async function loadPermits() {
     }).addTo(map);
     try { const bounds = permitsLayer.getBounds(); if (bounds.isValid()) map.fitBounds(bounds, { padding: [40, 40] }); } catch (_) {}
   } catch (err) { console.error("Failed to load permits data", err); }
+}
+
+async function createStreetViewMarker(lat, lng, feature) {
+  const thumbnailUrl = await getStreetViewThumbnail(lat, lng);
+
+  const iconHtml = `
+    <div class="streetview-marker">
+      <img src="${thumbnailUrl}" alt="Street View" class="streetview-thumb" />
+      <div class="marker-overlay">
+        <span class="marker-icon">📍</span>
+      </div>
+    </div>
+  `;
+
+  const customIcon = L.divIcon({
+    html: iconHtml,
+    className: 'custom-streetview-marker',
+    iconSize: [60, 45],
+    iconAnchor: [30, 45],
+    popupAnchor: [0, -45]
+  });
+
+  return L.marker([lat, lng], { icon: customIcon });
+}
+
+async function getStreetViewThumbnail(lat, lng) {
+  // Create a styled marker with street view icon using canvas
+  return new Promise((resolve) => {
+    const canvas = document.createElement('canvas');
+    canvas.width = 60;
+    canvas.height = 45;
+    const ctx = canvas.getContext('2d');
+
+    // Create gradient background
+    const gradient = ctx.createLinearGradient(0, 0, 60, 45);
+    gradient.addColorStop(0, '#e53935');
+    gradient.addColorStop(1, '#b71c1c');
+
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, 60, 45);
+
+    // Add street view icon
+    ctx.fillStyle = 'white';
+    ctx.font = '20px Arial';
+    ctx.textAlign = 'center';
+    ctx.fillText('🏙️', 30, 28);
+
+    // Add camera icon in corner
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+    ctx.beginPath();
+    ctx.arc(50, 15, 6, 0, 2 * Math.PI);
+    ctx.fill();
+
+    ctx.fillStyle = '#e53935';
+    ctx.font = '8px Arial';
+    ctx.fillText('📷', 50, 19);
+
+    resolve(canvas.toDataURL());
+  });
 }
 
 function createPopupContent(feature, lat, lng) {
